@@ -1,0 +1,332 @@
+@import "tailwindcss";
+
+@theme {
+  --breakpoint-5xl: 72rem;
+}
+
+/* Sofia Pro Font Family */
+@font-face {
+  font-family: "Sofia Pro";
+  src: url("/fonts/Sofia Pro UltraLight Az.otf") format("opentype");
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Chronicle Display Font Family */
+@font-face {
+  font-family: "Chronicle Display Semibold";
+  src: url("/fonts/Chronicle Display Semibold.otf") format("opentype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Chronicle Display Black";
+  src: url("/fonts/Chronicle Display Black.otf") format("opentype");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Trajan Pro Font Family */
+@font-face {
+  font-family: "Trajan Pro Regular";
+  src: url("/fonts/Trajan Pro Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Inter Tight Black */
+@font-face {
+  font-family: "Inter Tight Black";
+  src: url("/assets/fonts2/InterTight-Black.ttf") format("truetype");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Sofia Pro";
+  src: url("/fonts/Sofia Pro UltraLight Italic Az.otf") format("opentype");
+  font-weight: 200;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Sofia Pro";
+  src: url("/fonts/Sofia Pro ExtraLight Az.otf") format("opentype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Sofia Pro Light";
+  src: url("/fonts/Sofia Pro Light Az.otf") format("opentype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+.sofia-pro-light {
+  font-family: "Sofia Pro Light", sans-serif;
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: "Sofia Pro";
+  src: url("/fonts/Sofia Pro ExtraLight Italic Az.otf") format("opentype");
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Sofia Pro";
+  src: url("/fonts/Sofia Pro Light Az.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Sofia Pro";
+  src: url("/fonts/Sofia Pro Light Italic Az.otf") format("opentype");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Sofia Pro";
+  src: url("/fonts/Sofia Pro Regular Az.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Sofia Pro";
+  src: url("/fonts/Sofia Pro Regular Italic Az.otf") format("opentype");
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Sofia Pro";
+  src: url("/fonts/Sofia Pro Medium Az.otf") format("opentype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Sofia Pro";
+  src: url("/fonts/Sofia Pro Medium Italic Az.otf") format("opentype");
+  font-weight: 600;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Sofia Pro";
+  src: url("/fonts/Sofia Pro Semi Bold Az.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Explicit alias to avoid family collisions when selecting Semi Bold */
+@font-face {
+  font-family: "Sofia Pro Semibold";
+  src: url("/fonts/Sofia Pro Semi Bold Az.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Sofia Pro";
+  src: url("/fonts/Sofia Pro Semi Bold Italic Az.otf") format("opentype");
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Sofia Pro";
+  src: url("/fonts/Sofia Pro Bold Az.otf") format("opentype");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Sofia Pro";
+  src: url("/fonts/Sofia Pro Bold Italic Az.otf") format("opentype");
+  font-weight: 800;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Sofia Pro";
+  src: url("/fonts/Sofia Pro Black Az.otf") format("opentype");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Sofia Pro";
+  src: url("/fonts/Sofia Pro Black Italic Az.otf") format("opentype");
+  font-weight: 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+@import "tailwindcss";
+
+:root {
+  --color-primary: #1e4d2b;
+  --color-secondary: #0a2342;
+  --color-accent: #b0b3b8;
+  --font-primary: "Sofia Pro", sans-serif;
+}
+
+@theme inline {
+  --color-primary: var(--color-primary);
+  --color-secondary: var(--color-secondary);
+  --color-accent: var(--color-accent);
+  --font-sans: var(--font-primary);
+  --font-mono: var(--font-primary);
+}
+
+body {
+  /* background: var(--color-secondary); */
+  color: var(--color-accent);
+  font-family: var(--font-primary);
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* Custom color utilities */
+.bg-primary {
+  background-color: var(--color-primary);
+}
+
+.bg-secondary {
+  background-color: var(--color-secondary);
+}
+
+.bg-accent {
+  background-color: var(--color-accent);
+}
+
+.text-primary {
+  color: var(--color-primary);
+}
+
+.text-secondary {
+  color: var(--color-secondary);
+}
+
+.text-accent {
+  color: var(--color-accent);
+}
+
+.border-primary {
+  border-color: var(--color-primary);
+}
+
+.border-secondary {
+  border-color: var(--color-secondary);
+}
+
+.border-accent {
+  border-color: var(--color-accent);
+}
+
+/* Sofia Pro font utilities */
+.font-ultralight {
+  font-family: var(--font-primary);
+  font-weight: 200;
+}
+
+/* Chronicle Display font utilities */
+.font-chronicle {
+  font-family: "Chronicle Display Semibold", "Times New Roman", serif !important;
+}
+
+/* Section headings font utility */
+.font-section-heading {
+  font-family: "Sofia Pro", sans-serif !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.02em !important;
+}
+
+.font-extralight {
+  font-family: var(--font-primary);
+  font-weight: 300;
+}
+
+.font-light {
+  font-family: var(--font-primary);
+  font-weight: 400;
+}
+
+.font-regular {
+  font-family: var(--font-primary);
+  font-weight: 500;
+}
+
+.font-medium {
+  font-family: var(--font-primary);
+  font-weight: 600;
+}
+
+.font-semibold {
+  font-family: var(--font-primary);
+  font-weight: 700;
+}
+
+.font-bold {
+  font-family: var(--font-primary);
+  font-weight: 800;
+}
+
+.font-black {
+  font-family: var(--font-primary);
+  font-weight: 900;
+}
+
+/* Add this to your CSS file */
+.hero-section {
+  position: relative;
+  width: 100%;
+  height: 100vh; /* Adjust as needed */
+  overflow: hidden;
+}
+
+.hero-bg-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  z-index: 0;
+  object-fit: cover;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  color: #fff; /* Adjust for readability */
+  text-align: center;
+  /* Add padding/margin as needed */
+}

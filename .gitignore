@@ -1,0 +1,94 @@
+# -------------------------------
+# 🔥 Node / JavaScript defaults
+# -------------------------------
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json
+yarn.lock
+.pnpm-debug.log
+
+# -------------------------------
+# 📁 Build outputs
+# -------------------------------
+dist/
+build/
+out/
+.next/
+.next-static/
+.next-cache/
+.vercel/
+
+# -------------------------------
+# 🧪 Test + Coverage
+# -------------------------------
+coverage/
+*.lcov
+
+# -------------------------------
+# 🗂️ Environment & Secrets
+# -------------------------------
+.env
+.env.*      # like .env.local, .env.production, etc.
+!.env.example  # keep example files tracked
+
+# -------------------------------
+# 📜 Logs
+# -------------------------------
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# -------------------------------
+# 🐳 Docker & Containers
+# -------------------------------
+.dockerignore
+docker-compose.override.yml
+
+# -------------------------------
+# 📦 OS & IDE-specific
+# -------------------------------
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*.sublime-project
+*.sublime-workspace
+.vscode/
+.idea/
+
+# -------------------------------
+# 🧰 Misc tools
+# -------------------------------
+.cache/
+.eslintcache
+.stylelintcache
+*.tsbuildinfo
+*.tgz
+
+# -------------------------------
+# 📱 Next.js Specific
+# -------------------------------
+.next/
+.next/cache/
+*.manifest.json
+
+# -------------------------------
+# 🛠 Express Specific
+# -------------------------------
+tmp/
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# -------------------------------
+# 🪄 Deployment
+# -------------------------------
+.vercel/
+.now/
