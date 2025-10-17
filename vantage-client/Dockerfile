@@ -30,7 +30,7 @@ RUN npm install --production
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/next.config.mjs ./next.config.mjs
+COPY --from=builder /app/next.config.ts ./next.config.ts
 
 # Expose port
 EXPOSE 3000
