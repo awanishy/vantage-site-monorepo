@@ -1,0 +1,34 @@
+version: "3.9"
+
+services:
+  vantage-api:
+    build:
+      context: ./vantage-api
+      dockerfile: Dockerfile
+    container_name: vantage-api-backend
+    restart: always
+    ports:
+      - "8905:5000"
+    env_file:
+      - ./vantage-api/.env
+    networks:
+      - vantage-docker-net
+
+  vantage-client:
+    build:
+      context: ./vantage-client
+      dockerfile: Dockerfile
+    container_name: vantage-client-frontend
+    restart: always
+    ports:
+      - "8906:3000"
+    env_file:
+      - ./vantage-client/.env
+    depends_on:
+      - vantage-api
+    networks:
+      - vantage-docker-net
+
+networks:
+  vantage-docker-net:
+    external: true
