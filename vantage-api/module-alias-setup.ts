@@ -2,7 +2,7 @@ import moduleAlias from "module-alias";
 import path from "path";
 
 const isProduction = process.env.NODE_ENV === "production";
-const rootDir = isProduction ? path.join(__dirname, "..") : __dirname;
+const rootDir = __dirname;
 
 // Register the aliases
 moduleAlias.addAliases({
