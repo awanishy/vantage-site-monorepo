@@ -1,5 +1,5 @@
 # Stage 1: Build TypeScript code
-FROM node:20-alpine AS builder
+FROM node:latest AS builder
 
 WORKDIR /app
 
@@ -16,7 +16,7 @@ COPY . .
 RUN npm run build
 
 # Stage 2: Production
-FROM node:20-alpine
+FROM node:latest
 
 WORKDIR /app
 

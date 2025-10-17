@@ -1,7 +1,7 @@
 # ------------------------------
 # Stage 1: Build Next.js app
 # ------------------------------
-FROM node:20-alpine AS builder
+FROM node:latest AS builder
 WORKDIR /app
 
 # Copy package files and install dependencies
@@ -20,7 +20,7 @@ RUN npm run build
 # ------------------------------
 # Stage 2: Production
 # ------------------------------
-FROM node:20-alpine AS runner
+FROM node:latest AS runner
 WORKDIR /app
 
 # Set NODE_ENV
