@@ -1,12 +1,12 @@
 # ------------------------------
 # Stage 1: Build Next.js app
 # ------------------------------
-FROM node:latest AS builder
+FROM node:20-alpine AS builder
 WORKDIR /app
 
 # Copy package files and install dependencies
 COPY package*.json ./
-RUN npm install
+RUN npm ci
 
 # Copy environment variables (production)
 COPY .env .env
@@ -20,16 +20,18 @@ RUN npm run build
 # ------------------------------
 # Stage 2: Production
 # ------------------------------
-FROM node:latest AS runner
+FROM node:20-alpine AS runner
 WORKDIR /app
+
+# Set NODE_ENV
+ENV NODE_ENV=production
 
 # Copy only necessary files from builder
 COPY package*.json ./
-RUN npm install --production
+RUN npm ci --only=production
 
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
-COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/next.config.ts ./next.config.ts
 
 # Expose port

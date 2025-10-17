@@ -32,3 +32,5 @@ services:
 networks:
   vantage-docker-net:
     external: true
+
+

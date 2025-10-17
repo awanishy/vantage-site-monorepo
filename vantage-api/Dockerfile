@@ -1,13 +1,13 @@
 # Stage 1: Build TypeScript code
-FROM node:latest AS builder
+FROM node:20-alpine AS builder
 
 WORKDIR /app
 
 # Copy package.json and package-lock.json
 COPY package*.json ./
 
-# Install dependencies
-RUN npm install
+# Install dependencies (including dev dependencies for build)
+RUN npm ci
 
 # Copy all source code
 COPY . .
@@ -16,17 +16,18 @@ COPY . .
 RUN npm run build
 
 # Stage 2: Production
-FROM node:latest
+FROM node:20-alpine
 
 WORKDIR /app
 
-# Copy package.json and production dependencies
+# Copy package.json and package-lock.json
 COPY package*.json ./
-RUN npm install --production
 
-# Copy built files and node_modules from builder
+# Install ONLY production dependencies
+RUN npm ci --only=production
+
+# Copy built files from builder
 COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/node_modules ./node_modules
 
 # Expose backend port
 EXPOSE 5000
