@@ -137,7 +137,10 @@ export interface CreateGuestUserResponse {
 export interface CreateGuestOrderRequest {
   programId: string;
   selectedCurrency: string;
-  guestUserId: string;
+  email: string;
+  name: string;
+  phone?: string;
+  couponCode?: string;
 }
 
 export interface CreateGuestOrderResponse {

@@ -29,4 +29,3 @@ export function OrdersFilters({ status, onChange }: OrdersFiltersProps) {
     </div>
   );
 }
-

@@ -32,4 +32,3 @@ export function OrderCard({ order, onVerify }: OrderCardProps) {
     </div>
   );
 }
-

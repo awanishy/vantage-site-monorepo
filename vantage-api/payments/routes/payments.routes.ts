@@ -106,10 +106,10 @@ router.post("/guest/orders/:orderId/verify", verifyGuestPaymentHandler);
 
 /**
  * @route POST /api/payments/orders
- * @desc Create a new order
- * @access Private
+ * @desc Create a new order (guest-only flow)
+ * @access Public
  */
-router.post("/orders", authorize(), createOrderHandler);
+router.post("/orders", createOrderHandler);
 
 /**
  * @route GET /api/payments/orders/:id
@@ -134,14 +134,10 @@ router.post("/orders/check-active", authorize(), checkActiveOrdersHandler);
 
 /**
  * @route POST /api/payments/orders/:orderId/payment-session
- * @desc Create payment session for an order
- * @access Private
+ * @desc Create payment session for an order (guest-only flow)
+ * @access Public
  */
-router.post(
-  "/orders/:orderId/payment-session",
-  authorize(),
-  createPaymentSessionHandler
-);
+router.post("/orders/:orderId/payment-session", createPaymentSessionHandler);
 
 /**
  * @route POST /api/payments/orders/:orderId/verify

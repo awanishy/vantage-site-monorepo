@@ -3,7 +3,6 @@
 import React, { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { GuestCheckoutForm } from "@/components/checkout/GuestCheckoutForm";
-import { AuthenticatedCheckoutForm } from "@/components/checkout/AuthenticatedCheckoutForm";
 import { useAuth } from "@/providers/AuthProvider";
 import NavbarCheckout from "../components/NavbarCheckout";
 
@@ -19,7 +18,7 @@ interface ProgramData {
 
 const CheckoutContent = () => {
   const searchParams = useSearchParams();
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isLoading } = useAuth();
   const [programData, setProgramData] = useState<ProgramData | null>(null);
   const [isLoadingProgram, setIsLoadingProgram] = useState(false);
 
@@ -106,26 +105,15 @@ const CheckoutContent = () => {
                 Checkout
               </h1>
               <p className="text-gray-600">
-                {isAuthenticated
-                  ? "Complete your payment to enroll in this program."
-                  : "Enter your details to proceed with payment."}
+                Enter your details to proceed with payment.
               </p>
             </div>
-            {isAuthenticated ? (
-              <AuthenticatedCheckoutForm
-                programId={programData.programId}
-                programData={programData}
-                onSuccess={handleCheckoutSuccess}
-                onError={handleCheckoutError}
-              />
-            ) : (
-              <GuestCheckoutForm
-                programId={programData.programId}
-                programData={programData}
-                onSuccess={handleCheckoutSuccess}
-                onError={handleCheckoutError}
-              />
-            )}
+            <GuestCheckoutForm
+              programId={programData.programId}
+              programData={programData}
+              onSuccess={handleCheckoutSuccess}
+              onError={handleCheckoutError}
+            />
           </div>
         </div>
       </div>

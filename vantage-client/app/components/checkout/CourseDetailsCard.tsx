@@ -6,6 +6,7 @@ import { usePayment } from "@/providers/PaymentProvider";
 import { useToast } from "@/providers/ToastProvider";
 import { openCashfreePayment } from "../../utils/cashfreePayment";
 import Image from "next/image";
+import { CouponCode } from "./CouponCode";
 
 interface VerificationResult {
   success: boolean;
@@ -50,7 +51,6 @@ interface CourseDetailsCardProps {
   hasPricing: boolean;
   isPricingLoading: boolean;
   // Guest checkout specific props
-  isGuestCheckout?: boolean;
   guestFormData?: {
     email: string;
     name: string;
@@ -74,22 +74,26 @@ export const CourseDetailsCard: React.FC<CourseDetailsCardProps> = ({
   isSubmitting,
   hasPricing,
   isPricingLoading,
-  isGuestCheckout = false,
   guestFormData,
   isGuestFormInvalid = false,
   onSuccess,
   onError,
 }) => {
-  const {
-    createGuestUser,
-    createGuestOrder,
-    createGuestPaymentSession,
-    createOrder,
-    createPaymentSession,
-    verifyPayment,
-  } = usePayment();
+  const { createGuestOrder, createGuestPaymentSession, verifyPayment } =
+    usePayment();
   const { showToast } = useToast();
   const [internalIsSubmitting, setInternalIsSubmitting] = useState(false);
+  const [appliedCoupon, setAppliedCoupon] = useState<{
+    code: string;
+    name: string;
+    type: "percentage" | "fixed_amount";
+    value: number;
+  } | null>(null);
+  const [appliedCalculation, setAppliedCalculation] = useState<{
+    originalAmount: number;
+    discountAmount: number;
+    finalAmount: number;
+  } | null>(null);
 
   // Verification modal state
   const [isVerifyModalOpen, setIsVerifyModalOpen] = useState(false);
@@ -113,6 +117,31 @@ export const CourseDetailsCard: React.FC<CourseDetailsCardProps> = ({
     }).format(amount);
   };
 
+  // Handlers for CouponCode component
+  const handleCouponApplied = (
+    coupon: {
+      code: string;
+      name: string;
+      type: "percentage" | "fixed_amount";
+      value: number;
+    } | null,
+    calculation:
+      | {
+          originalAmount: number;
+          discountAmount: number;
+          finalAmount: number;
+        }
+      | undefined
+  ) => {
+    setAppliedCoupon(coupon);
+    setAppliedCalculation(calculation || null);
+  };
+
+  const handleCouponRemoved = () => {
+    setAppliedCoupon(null);
+    setAppliedCalculation(null);
+  };
+
   // Validation is now handled in GuestCheckoutForm and passed via prop
 
   const handlePaymentSuccess = async (paymentData: Record<string, unknown>) => {
@@ -126,7 +155,7 @@ export const CourseDetailsCard: React.FC<CourseDetailsCardProps> = ({
       );
 
       let verificationResult: VerificationResult;
-      if (isGuestCheckout && guestFormData) {
+      if (guestFormData) {
         // Verify guest payment via guest endpoint proxy
         const resp = await fetch(
           `/api/payments/guest/orders/${String(paymentData.orderId)}/verify`,
@@ -150,7 +179,7 @@ export const CourseDetailsCard: React.FC<CourseDetailsCardProps> = ({
         setVerifyMessage(
           "Your payment has been verified successfully. Redirecting to your orders..."
         );
-        if (isGuestCheckout && guestFormData) {
+        if (guestFormData) {
           showToast(
             "Payment successful! Sending verification email...",
             "success"
@@ -254,7 +283,7 @@ export const CourseDetailsCard: React.FC<CourseDetailsCardProps> = ({
           "Please wait while we confirm your payment with our provider."
         );
         let verificationResult: VerificationResult;
-        if (isGuestCheckout && guestFormData) {
+        if (guestFormData) {
           const resp = await fetch(
             `/api/payments/guest/orders/${String(error.orderId)}/verify`,
             {
@@ -277,7 +306,7 @@ export const CourseDetailsCard: React.FC<CourseDetailsCardProps> = ({
           setVerifyMessage(
             "Your payment has been verified successfully. Redirecting to your orders..."
           );
-          if (isGuestCheckout && guestFormData) {
+          if (guestFormData) {
             showToast(
               "Payment was actually successful! Sending verification email...",
               "success"
@@ -355,62 +384,41 @@ export const CourseDetailsCard: React.FC<CourseDetailsCardProps> = ({
       return;
     }
 
-    if (isGuestCheckout && isGuestFormInvalid) {
+    if (isGuestFormInvalid) {
       showToast("Please fill in all required fields correctly", "error");
+      return;
+    }
+
+    if (!guestFormData) {
+      showToast("Please fill in your details", "error");
       return;
     }
 
     setInternalIsSubmitting(true);
 
     try {
-      if (isGuestCheckout && guestFormData) {
-        showToast("Creating guest account...", "info");
-        const guestUser = await createGuestUser({
-          email: guestFormData.email,
-          name: guestFormData.name,
-          phone: guestFormData.phone,
-        });
+      showToast("Creating order...", "info");
+      const order = await createGuestOrder({
+        programId,
+        selectedCurrency,
+        email: guestFormData?.email || "",
+        name: guestFormData?.name || "",
+        phone: guestFormData?.phone || "",
+        couponCode: appliedCoupon?.code || undefined,
+      });
 
-        if (!guestUser) {
-          return;
-        }
+      showToast("Preparing payment...", "info");
+      const session = await createGuestPaymentSession(
+        order.orderId,
+        guestFormData?.email || ""
+      );
 
-        showToast("Creating order...", "info");
-        const order = await createGuestOrder({
-          programId,
-          selectedCurrency,
-          guestUserId: guestUser.userId,
-        });
-
-        showToast("Preparing payment...", "info");
-        const session = await createGuestPaymentSession(
-          order.orderId,
-          guestFormData.email
-        );
-
-        await openCashfreePayment({
-          paymentSession: session,
-          onSuccess: handlePaymentSuccess,
-          onFailure: handlePaymentFailure,
-          onClose: () => {},
-        });
-      } else {
-        showToast("Creating order...", "info");
-        const order = await createOrder({
-          programId,
-          selectedCurrency,
-        });
-
-        showToast("Preparing payment...", "info");
-        const session = await createPaymentSession(order.orderId);
-
-        await openCashfreePayment({
-          paymentSession: session,
-          onSuccess: handlePaymentSuccess,
-          onFailure: handlePaymentFailure,
-          onClose: () => {},
-        });
-      }
+      await openCashfreePayment({
+        paymentSession: session,
+        onSuccess: handlePaymentSuccess,
+        onFailure: handlePaymentFailure,
+        onClose: () => {},
+      });
 
       showToast("Payment ready! Please complete your payment.", "success");
     } catch (error: unknown) {
@@ -603,12 +611,27 @@ export const CourseDetailsCard: React.FC<CourseDetailsCardProps> = ({
                 </span>
               </div>
 
+              {/* Coupon Section */}
+              <CouponCode
+                programId={programId}
+                selectedCurrency={selectedCurrency}
+                orderAmount={pricing.pricing.tuition}
+                onCouponApplied={handleCouponApplied}
+                onCouponRemoved={handleCouponRemoved}
+                disabled={isSubmitting || internalIsSubmitting}
+                hasPricing={hasPricing}
+                isPricingLoading={isPricingLoading}
+              />
+
               <div className="border-t border-gray-200 pt-3">
                 <div className="flex justify-between items-center text-lg font-bold">
                   <span>Total Amount</span>
                   <span className="text-blue-600">
                     {formatCurrency(
-                      pricing.pricing.totalAmount,
+                      appliedCalculation
+                        ? appliedCalculation.finalAmount ||
+                            pricing.pricing.totalAmount
+                        : pricing.pricing.totalAmount,
                       selectedCurrency
                     )}
                   </span>

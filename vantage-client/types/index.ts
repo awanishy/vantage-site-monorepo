@@ -68,6 +68,9 @@ export type {
 // Toast Types
 export * from "./toast.types";
 
+// Coupon Types
+export * from "./coupon.types";
+
 // ============================================================================
 // COMMON TYPE UTILITIES
 // ============================================================================

@@ -14,7 +14,7 @@ export const createPaymentSessionHandler = async (
 ): Promise<void> => {
   try {
     const { orderId } = req.params;
-    const authUserId = req.user?.userId; // Make authentication optional
+    const { email }: { email?: string } = req.body;
 
     if (!orderId) {
       res.status(400).json({
@@ -34,11 +34,21 @@ export const createPaymentSessionHandler = async (
       return;
     }
 
-    // If user is authenticated, verify order belongs to user
-    if (authUserId && String(order.userId) !== String(authUserId)) {
+    // Get user details
+    const user = await User.findById(order.userId).lean();
+    if (!user) {
+      res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+      return;
+    }
+
+    // For guest checkout, verify email matches if provided
+    if (email && user.email.toLowerCase() !== email.toLowerCase()) {
       res.status(403).json({
         success: false,
-        message: "Order does not belong to user",
+        message: "Email does not match the order",
       });
       return;
     }
@@ -78,16 +88,6 @@ export const createPaymentSessionHandler = async (
       res.status(400).json({
         success: false,
         message: "Order expiry time exceeds maximum allowed duration",
-      });
-      return;
-    }
-
-    // Get user details
-    const user = await User.findById(order.userId).lean();
-    if (!user) {
-      res.status(404).json({
-        success: false,
-        message: "User not found",
       });
       return;
     }
@@ -165,7 +165,7 @@ export const createPaymentSessionHandler = async (
             }/payments/status?order_id={order_id}`,
             notify_url: `${getEnv().BACKEND_URL}/api/payments/webhooks`,
           },
-          order_note: "Program purchase",
+          order_note: "Guest program purchase",
           order_expiry_time: order.expiresAt.toISOString(), // Use order's actual expiry time
         },
         { requestId, idempotencyKey: merchantOrderId }
@@ -208,7 +208,7 @@ export const createPaymentSessionHandler = async (
         amount: order.orderAmount,
         currency: order.orderCurrency,
         status: "PENDING",
-        paymentMessage: "Payment session created - awaiting user action",
+        paymentMessage: "Guest payment session created - awaiting user action",
         metadata: {
           sessionCreatedAt: new Date(),
           source: "payment_session_creation",

@@ -131,7 +131,6 @@ export const AuthenticatedCheckoutForm: React.FC<
             isSubmitting={false}
             hasPricing={hasPricing}
             isPricingLoading={isPricingLoading}
-            isGuestCheckout={false}
             onSuccess={onSuccess}
             onError={onError}
             isGuestFormInvalid={false}

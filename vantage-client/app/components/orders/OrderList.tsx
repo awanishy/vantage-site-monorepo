@@ -18,4 +18,3 @@ export function OrderList({ orders, onVerify }: OrderListProps) {
     </div>
   );
 }
-

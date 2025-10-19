@@ -31,6 +31,7 @@ import { seedFellowshipProgram } from "@/courses/seed";
 import { CurrencyService } from "./currency/currency.service";
 import currencyRoutes from "@/currency/currency.routes";
 import { seedEmailTemplates } from "@/config/email/templates/seedEmailTemplates";
+import couponRoutes from "@/coupons/coupon.routes";
 
 const envVars = getEnv();
 
@@ -101,6 +102,7 @@ app.use("/api/programs", courseRoutes);
 app.use("/api/users/auth", authRoutes);
 app.use("/api/payments", paymentsRoutes);
 app.use("/api/currency", currencyRoutes);
+app.use("/api/coupons", couponRoutes);
 
 // Error handling middleware (must be last)
 app.use(errorHandler);

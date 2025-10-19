@@ -14,25 +14,25 @@ export async function findProgramByIdentifier(
   }
 
   const idOrSlug = String(identifier).trim();
-  
+
   // Build query conditions
   const conditions: any[] = [];
-  
+
   // Add ObjectId condition if valid
   if (Types.ObjectId.isValid(idOrSlug)) {
     conditions.push({ _id: idOrSlug });
   }
-  
+
   // Add programId condition
   conditions.push({ programId: idOrSlug });
-  
+
   // Add slug condition
   conditions.push({ slug: idOrSlug });
 
   // Single query with $or to find by any of the conditions
-  const program = await ProgramModel.findOne({
-    $or: conditions
-  }).lean() as ProgramBase | null;
+  const program = (await ProgramModel.findOne({
+    $or: conditions,
+  }).lean()) as ProgramBase | null;
 
   return program;
 }
@@ -45,11 +45,10 @@ export async function getProgramByIdentifier(
   identifier: string
 ): Promise<ProgramBase> {
   const program = await findProgramByIdentifier(identifier);
-  
+
   if (!program) {
     throw new Error(`Program not found: ${identifier}`);
   }
-  
+
   return program;
 }
-

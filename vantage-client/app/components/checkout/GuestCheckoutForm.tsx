@@ -150,34 +150,16 @@ export const GuestCheckoutForm: React.FC<GuestCheckoutFormProps> = ({
                 </div>
               </div>
 
-              {/* Account Options */}
+              {/* Account Information */}
               <div className="">
                 <div className="bg-blue-50 p-4">
                   <h4 className="font-semibold text-blue-900 mb-2">
                     Account Information
                   </h4>
-                  <p className="text-sm text-blue-700 mb-3">
+                  <p className="text-sm text-blue-700">
                     We&apos;ll create a guest account for you and send login
                     credentials to your email address.
                   </p>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-blue-600">
-                      Already have an account?
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const email = formData.email.trim();
-                        const callbackUrl = `/checkout?programId=${programData.slug}`;
-                        window.location.href = `/signin?email=${encodeURIComponent(
-                          email
-                        )}&callbackUrl=${encodeURIComponent(callbackUrl)}`;
-                      }}
-                      className="text-sm text-blue-600 hover:text-blue-800 underline font-medium"
-                    >
-                      Sign in instead
-                    </button>
-                  </div>
                 </div>
               </div>
             </div>
@@ -198,7 +180,6 @@ export const GuestCheckoutForm: React.FC<GuestCheckoutFormProps> = ({
             isSubmitting={false}
             hasPricing={hasPricing}
             isPricingLoading={isPricingLoading}
-            isGuestCheckout={true}
             guestFormData={formData}
             onSuccess={onSuccess}
             onError={onError}

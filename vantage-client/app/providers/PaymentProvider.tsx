@@ -511,7 +511,7 @@ export function PaymentProvider({ children }: PaymentProviderProps) {
 
         showLoadingToast("Creating your order...");
 
-        const response = await apiCall<Order>("/api/payments/guest/order", {
+        const response = await apiCall<Order>("/api/payments/orders", {
           method: "POST",
           body: JSON.stringify(data),
         });
